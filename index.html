@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大樂透</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>大樂透</h1>
+    </header>
+
+    <main>
+
+        <button id="restartBtn">重新開始</button>
+        <div class="container">
+            <h2>Please enter 6 non-repeating numbers between 1-49</h2>
+            <button id="createRandomNum">電腦隨機產生</button>
+            <div id="userInputs">
+                <label for="num1">Enter a digit between 1-49:</label>
+                <input type="text" id="num1" name="num1" min="1" max="49" maxlength="2"><br>
+                <label for="num2">Enter a digit between 1-49:</label>
+                <input type="text" id="num2" name="num2" min="1" max="49" maxlength="2"><br>
+                <label for="num3">Enter a digit between 1-49:</label>
+                <input type="text" id="num3" name="num3" min="1" max="49" maxlength="2"><br>
+                <label for="num4">Enter a digit between 1-49:</label>
+                <input type="text" id="num4" name="num4" min="1" max="49" maxlength="2"><br>
+                <label for="num5">Enter a digit between 1-49:</label>
+                <input type="text" id="num5" name="num5" min="1" max="49" maxlength="2"><br>
+                <label for="num6">Enter a digit between 1-49:</label>
+                <input type="text" id="num6" name="num6" min="1" max="49" maxlength="2"><br>
+            </div>
+            <button id="checkResult">開獎</button>
+
+            <p id="correctGuess"></p>
+
+        </div>
+
+        <div>
+            <button id="resultButton">顯示答案</button>
+            <p id="result"></p>
+        </div>
+    </main>
+
+
+    <Script>
+
+        let set = new Set()
+        let userSet = new Set()
+        let correctGuess = []
+        createRandomNum()
+
+        function createRandomNum() {
+            set.clear();
+            while (set.size < 6) {
+                let randomNum = Math.floor(Math.random() * 49) + 1
+                if (set.has(randomNum)) {
+                    continue;
+                } else {
+                    set.add(randomNum)
+                }
+            }
+            let result = Array.from(set.values())
+            $('#result').text(result)
+            $('#result').hide();
+        }
+
+        function createUserRandomNum() {
+
+            userSet.clear();
+            while (userSet.size < 6) {
+                let randomNum = Math.floor(Math.random() * 49) + 1
+                if (userSet.has(randomNum)) {
+                    continue;
+                } else {
+                    userSet.add(randomNum)
+                }
+            }
+            let result = Array.from(userSet.values())
+
+            $('#num1').val(result[0])
+            $('#num2').val(result[1])
+            $('#num3').val(result[2])
+            $('#num4').val(result[3])
+            $('#num5').val(result[4])
+            $('#num6').val(result[5])
+        }
+
+        $('#createRandomNum').click(function () {
+
+            createUserRandomNum();
+
+        })
+
+
+        $('#checkResult').click(function () {
+            let num1 = parseInt($('#num1').val())
+            let num2 = parseInt($('#num2').val())
+            let num3 = parseInt($('#num3').val())
+            let num4 = parseInt($('#num4').val())
+            let num5 = parseInt($('#num5').val())
+            let num6 = parseInt($('#num6').val())
+
+            if (set.has(num1)) {
+                correctGuess.push(num1)
+            }
+            if (set.has(num2)) {
+                correctGuess.push(num2)
+            }
+            if (set.has(num3)) {
+                correctGuess.push(num3)
+            }
+            if (set.has(num4)) {
+                correctGuess.push(num4)
+            }
+            if (set.has(num5)) {
+                correctGuess.push(num5)
+            }
+            if (set.has(num6)) {
+                correctGuess.push(num6)
+            }
+
+            if (correctGuess.length === 0) {
+                $('#correctGuess').text('You guessed everything wrong, dumbass')
+            } else if (correctGuess.length === 6) {
+                $('#correctGuess').text('Wow, you got every number!')
+            } else {
+                $('#correctGuess').text('Correct guesses: ' + correctGuess)
+            }
+
+            correctGuess = []
+        })
+
+
+        $('#resultButton').click(function () {
+
+            if ($(this).hasClass('close')) {
+                $(this).next().slideUp(200);
+                $(this).removeClass('close');
+
+            } else {
+                $(this).next().slideDown(200);
+                $(this).addClass('close');
+            }
+
+        })
+
+        $('#restartBtn').click(function () {
+            $('input').val("");
+            $('#result').text("");
+            $('#correctGuess').text("");
+            createRandomNum();
+        })
+    </Script>
+</body>
+
+</html>
